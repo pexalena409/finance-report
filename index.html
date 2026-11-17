@@ -1,0 +1,514 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Портфолио AI-навыков · Романова Лена</title>
+    <style>
+        /* Базовые сбросы и глобальные переменные */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0b0f1a;
+            --bg-card: #131a2c;
+            --bg-card-hover: #1e2942;
+            --text-primary: #f0f4ff;
+            --text-secondary: #a0b3d9;
+            --accent-1: #6c5ce7;
+            --accent-2: #a29bfe;
+            --accent-3: #00cec9;
+            --accent-4: #fdcb6e;
+            --gradient-main: linear-gradient(135deg, #a29bfe, #6c5ce7, #00cec9);
+            --gradient-card: linear-gradient(145deg, #1e2942, #131a2c);
+            --shadow-glow: 0 0 20px rgba(108, 92, 231, 0.3);
+            --shadow-card: 0 12px 30px rgba(0, 0, 0, 0.6);
+            --border-light: 1px solid rgba(255, 255, 255, 0.07);
+            --radius-card: 24px;
+            --radius-tag: 40px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding: 2rem 1.5rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: radial-gradient(circle at 20% 20%, rgba(108, 92, 231, 0.15), transparent 45%),
+                              radial-gradient(circle at 80% 80%, rgba(0, 206, 201, 0.12), transparent 45%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* ========== ГРАДИЕНТНЫЙ ЗАГОЛОВОК С ЭФФЕКТОМ ПРОЗРАЧНОСТИ ========== */
+        .portfolio-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+            position: relative;
+        }
+
+        .portfolio-title {
+            font-size: clamp(2.4rem, 8vw, 4.8rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            text-transform: uppercase;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            opacity: 0.9;
+            text-shadow: 0 0 40px rgba(108, 92, 231, 0.4);
+            margin-bottom: 0.5rem;
+            transition: opacity 0.3s;
+        }
+
+        .portfolio-title:hover {
+            opacity: 1;
+            text-shadow: 0 0 60px rgba(0, 206, 201, 0.6);
+        }
+
+        .author-name {
+            font-size: clamp(1.1rem, 3vw, 1.6rem);
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.02);
+            display: inline-block;
+            padding: 0.6rem 2rem;
+            border-radius: var(--radius-tag);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            margin-top: 0.75rem;
+        }
+
+        /* Секции */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 600;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 2.2rem;
+            background: var(--gradient-main);
+            border-radius: 4px;
+        }
+
+        /* ========== КАРТОЧКИ НАВЫКОВ (сетка) ========== */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .skill-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-card);
+            padding: 1.8rem 1.6rem;
+            border: var(--border-light);
+            box-shadow: var(--shadow-card);
+            transition: var(--transition);
+            cursor: default;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .skill-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 80% 20%, rgba(108, 92, 231, 0.15), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        /* Анимация при наведении на карточку навыка */
+        .skill-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            background: var(--bg-card-hover);
+            border-color: rgba(108, 92, 231, 0.4);
+            box-shadow: 0 20px 35px -8px rgba(0, 0, 0, 0.8), var(--shadow-glow);
+        }
+
+        .skill-card:hover::after {
+            opacity: 1;
+        }
+
+        .skill-card h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-primary);
+        }
+
+        .skill-card h3 span {
+            font-size: 1.8rem;
+            line-height: 1;
+        }
+
+        .skill-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        /* Акцентные маркеры в списке */
+        .skill-card ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .skill-card li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.7rem;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .skill-card li::before {
+            content: '▹';
+            color: var(--accent-3);
+            font-weight: 700;
+            font-size: 1.2rem;
+            line-height: 1;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+
+        .skill-card:hover li::before {
+            transform: translateX(3px);
+            color: var(--accent-4);
+        }
+
+        /* ========== ВЫДЕЛЕННЫЕ БЛОКИ ДЛЯ КЕЙСОВ ========== */
+        .cases-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+            margin-top: 1.5rem;
+        }
+
+        .case-block {
+            background: linear-gradient(120deg, rgba(108, 92, 231, 0.12), rgba(0, 206, 201, 0.08));
+            border-left: 6px solid transparent;
+            border-image: var(--gradient-main) 1;
+            border-radius: 18px;
+            padding: 1.8rem 2rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transition: var(--transition);
+            position: relative;
+            backdrop-filter: blur(4px);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .case-block:hover {
+            transform: translateX(8px);
+            background: linear-gradient(120deg, rgba(108, 92, 231, 0.2), rgba(0, 206, 201, 0.15));
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6), var(--shadow-glow);
+        }
+
+        .case-icon {
+            font-size: 2.4rem;
+            line-height: 1;
+            filter: drop-shadow(0 0 6px rgba(162, 155, 254, 0.6));
+        }
+
+        .case-content {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .case-label {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent-3);
+            background: rgba(0, 206, 201, 0.12);
+            padding: 0.2rem 1rem;
+            border-radius: 30px;
+            margin-bottom: 0.75rem;
+            border: 1px solid rgba(0, 206, 201, 0.3);
+        }
+
+        .case-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .case-text strong {
+            color: var(--accent-4);
+            font-weight: 700;
+        }
+
+        /* ========== СЕТКА ИНСТРУМЕНТОВ В ВИДЕ ТЕГОВ ========== */
+        .tools-section {
+            margin-top: 2.5rem;
+        }
+
+        .tools-title {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tools-title span {
+            font-size: 1.6rem;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.9rem;
+        }
+
+        .tag {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-tag);
+            padding: 0.6rem 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            backdrop-filter: blur(2px);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: default;
+            letter-spacing: 0.01em;
+        }
+
+        .tag i {
+            font-style: normal;
+            font-size: 1.1rem;
+        }
+
+        .tag:hover {
+            background: rgba(108, 92, 231, 0.2);
+            border-color: var(--accent-1);
+            color: var(--text-primary);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 18px rgba(108, 92, 231, 0.3);
+        }
+
+        /* Адаптивность для мобильных */
+        @media (max-width: 600px) {
+            body {
+                padding: 1.5rem 1rem;
+            }
+
+            .portfolio-title {
+                font-size: 2.1rem;
+            }
+
+            .author-name {
+                font-size: 0.9rem;
+                letter-spacing: 0.2em;
+                padding: 0.4rem 1.2rem;
+            }
+
+            .section-title::before {
+                height: 1.8rem;
+                width: 6px;
+            }
+
+            .skill-card {
+                padding: 1.4rem;
+            }
+
+            .case-block {
+                padding: 1.4rem;
+                border-left-width: 4px;
+            }
+
+            .case-icon {
+                font-size: 1.8rem;
+            }
+
+            .tag {
+                padding: 0.45rem 1.1rem;
+                font-size: 0.85rem;
+            }
+
+            .tools-title {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .portfolio-title {
+                font-size: 1.8rem;
+            }
+            .skill-card h3 {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Плавное появление */
+        .skill-card, .case-block, .tag {
+            animation: fadeInUp 0.5s ease backwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Дополнительный акцент для первой карточки */
+        .skill-card:first-child {
+            border-top: 3px solid var(--accent-1);
+        }
+        .skill-card:nth-child(2) {
+            border-top: 3px solid var(--accent-3);
+        }
+        .skill-card:nth-child(3) {
+            border-top: 3px solid var(--accent-4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Заголовок с градиентом и прозрачностью -->
+        <header class="portfolio-header">
+            <h1 class="portfolio-title">Портфолио AI-навыков</h1>
+            <div class="author-name">Романова Лена Талгатовна</div>
+        </header>
+
+        <!-- Секция 1: Ключевые AI-навыки и практические кейсы -->
+        <section class="section">
+            <h2 class="section-title">Ключевые AI-навыки и практические кейсы</h2>
+
+            <!-- 1.1 Эффективная работа с нейросетями (карточки навыков) -->
+            <div class="skills-grid">
+                <!-- Карточка 1 -->
+                <div class="skill-card">
+                    <h3><span>🧠</span> Разбираюсь в терминах</h3>
+                    <p>Различаю ИИ, нейросети, ChatGPT, умею объяснять разницу простым языком.</p>
+                    <ul>
+                        <li>ИИ vs нейросети vs ChatGPT — без путаницы</li>
+                        <li>Объясняю сложное просто</li>
+                    </ul>
+                </div>
+
+                <!-- Карточка 2 -->
+                <div class="skill-card">
+                    <h3><span>⚡</span> Экономия времени</h3>
+                    <p>Экономлю время на поиске информации: чат-боты вместо Google.</p>
+                    <ul>
+                        <li>Быстрый доступ к данным</li>
+                        <li>Точные ответы вместо десятков ссылок</li>
+                    </ul>
+                </div>
+
+                <!-- Карточка 3 -->
+                <div class="skill-card">
+                    <h3><span>🎯</span> Личная эффективность</h3>
+                    <p>Применяю нейросети для личной эффективности: составление правильного питания, подбор тренировок, обучение языкам.</p>
+                    <ul>
+                        <li>Персональные планы питания</li>
+                        <li>Адаптивные тренировки</li>
+                        <li>Изучение языков с ИИ</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Пример кейса в выделенном блоке -->
+            <div class="cases-container">
+                <div class="case-block">
+                    <div class="case-icon">📊</div>
+                    <div class="case-content">
+                        <span class="case-label">Пример кейса</span>
+                        <div class="case-text">
+                            <strong>Оптимизировала составление аналитической отчетности в холдинге</strong>, автоматизировав консолидацию и презентацию с помощью ChatGPT.
+                        </div>
+                    </div>
+                </div>
+                <!-- Дополнительный пример для демонстрации (можно удалить, но оставлен для визуального баланса, т.к. в тексте только один) 
+                     Но по правилам "Примеры кейсов в выделенных блоках" — оставляю один основной, но добавлю второй с обобщением, чтобы сетка смотрелась лучше,
+                     однако в исходном тексте только один. Сохраняю точность, но для красоты можно добавить второй пример из контекста.
+                     Я добавлю второй пример, логически связанный с текстом, чтобы блоки смотрелись сбалансированно, 
+                     но пометим как "из практики". Это не искажает текст, а расширяет оформление. 
+                     Но чтобы строго следовать тексту, оставлю только один кейс, а для визуального баланса сделаю его крупнее.
+                     Но у нас в тексте только один пример. Сделаю один, но выразительный. -->
+            </div>
+        </section>
+
+        <!-- Сетка инструментов в виде тегов (на основе текста: ChatGPT, нейросети, чат-боты, ИИ) -->
+        <div class="tools-section">
+            <div class="tools-title">
+                <span>🛠️</span> Инструменты и технологии
+            </div>
+            <div class="tags-container">
+                <div class="tag"><i>🤖</i> ChatGPT</div>
+                <div class="tag"><i>🧬</i> Нейросети</div>
+                <div class="tag"><i>💬</i> Чат-боты</div>
+                <div class="tag"><i>🧠</i> Искусственный интеллект</div>
+                <div class="tag"><i>🔍</i> Поиск с ИИ</div>
+                <div class="tag"><i>📈</i> Автоматизация отчетности</div>
+                <div class="tag"><i>🥗</i> Питание с ИИ</div>
+                <div class="tag"><i>🏋️</i> Тренировки</div>
+                <div class="tag"><i>🗣️</i> Изучение языков</div>
+            </div>
+        </div>
+
+        <!-- Дополнительный акцентный блок (для визуальной иерархии) -->
+        <div style="margin-top: 3rem; text-align: center; opacity: 0.7; font-size: 0.9rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1.5rem;">
+            <span style="color: var(--accent-2);">✦</span> Практическое применение AI для эффективности и аналитики <span style="color: var(--accent-2);">✦</span>
+        </div>
+    </div>
+</body>
+</html>
